@@ -1,32 +1,35 @@
 import postApi from "./api/postApi.js";
 import { setTextContent } from "./utils";
-
-
+import dayjs from 'dayjs';
+import relativeTime  from 'dayjs/plugin/relativeTime';
+dayjs.extend(relativeTime);
 
 function createLiElement(postItem) {
 
-    try {
-        const postTemplate = document.getElementById('postItemTemplate');
+    const postTemplate = document.getElementById('postTemplate');
 
-        if(!postTemplate) return;
+    if(!postTemplate) return;
+
+    const newPostItem  = postTemplate.content.firstElementChild.cloneNode(true);
+
+    if(!newPostItem) return;
     
-        const newPostItem  = postTemplate.content.firstElementChild.cloneNode(true);
-        if(!newPostItem) return;
-        
-        setTextContent(newPostItem , '[data-id="title"]' , postItem.title);
-        setTextContent(newPostItem , '[data-id="description"]' , postItem.description);
-        setTextContent(newPostItem , '[data-id="author"]' , postItem.author);
-        
-        const thumnailElement = newPostItem.querySelector('[data-id="thumbnail"]');
-        if(thumnailElement) thumnailElement.src = postItem.imageUrl;
-
-        return newPostItem;
+    setTextContent(newPostItem , '[data-id="title"]' , postItem.title);
+    setTextContent(newPostItem , '[data-id="description"]' , postItem.description);
+    setTextContent(newPostItem , '[data-id="author"]' , postItem.author);
+    setTextContent(newPostItem , '[data-id="timeSpan"]' , ` - ${dayjs(postItem.updatedAt).fromNow()}`);
     
-    } catch (error) {
+    const thumnailElement = newPostItem.querySelector('[data-id="thumbnail"]');
+    if(thumnailElement) {
 
-        console.log('failed to create post item' , error);
+        thumnailElement.src = postItem.imageUrl;
+        thumnailElement.addEventListener('error' , () => {
+
+            thumnailElement.src = "https://placehold.co/600x400?text=Thumbnail";
+        });
     }
 
+    return newPostItem;
 }
 
 function renderPostList(postList) {
