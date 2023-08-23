@@ -29,6 +29,13 @@ export function createPostElement(postItem) {
         });
     }
 
+    const divPost = newPostItem.querySelector('.post-item');
+    if(!divPost) return;
+
+    divPost.addEventListener('click' , () => {
+        window.location.assign(`/post-details.html?id=${postItem.id}`)
+    })
+
     return newPostItem;
 }
 
