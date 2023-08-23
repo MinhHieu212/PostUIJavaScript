@@ -2,7 +2,8 @@ import postApi from "./api/postApi.js";
 
 
 async function main() {
-    try {
+    try {       
+
         const queryParams = {
             _page: 1,
             _limit: 6

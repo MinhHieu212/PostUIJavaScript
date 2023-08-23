@@ -1,61 +1,58 @@
 import postApi from "./api/postApi.js";
-import { setTextContent } from "./utils";
-import dayjs from 'dayjs';
-import relativeTime  from 'dayjs/plugin/relativeTime';
-dayjs.extend(relativeTime);
+import {renderPostList , renderPagination , initPagination , initSearch} from "./utils";
 
-function createLiElement(postItem) {
+async function handleFilterChange(filterName , filterValue) {
+    try {
 
-    const postTemplate = document.getElementById('postTemplate');
+        const url  = new URL(window.location);
+        url.searchParams.set(filterName , filterValue);
 
-    if(!postTemplate) return;
+        if(filterName == 'title_like') url.searchParams.set('_page' , 1);
 
-    const newPostItem  = postTemplate.content.firstElementChild.cloneNode(true);
+        history.pushState({} , '' , url);
 
-    if(!newPostItem) return;
-    
-    setTextContent(newPostItem , '[data-id="title"]' , postItem.title);
-    setTextContent(newPostItem , '[data-id="description"]' , postItem.description);
-    setTextContent(newPostItem , '[data-id="author"]' , postItem.author);
-    setTextContent(newPostItem , '[data-id="timeSpan"]' , ` - ${dayjs(postItem.updatedAt).fromNow()}`);
-    
-    const thumnailElement = newPostItem.querySelector('[data-id="thumbnail"]');
-    if(thumnailElement) {
+        const {data , pagination} = await postApi.getAll(url.searchParams);
+        renderPostList('postsList', data);
+        renderPagination('postsPagination', pagination);
 
-        thumnailElement.src = postItem.imageUrl;
-        thumnailElement.addEventListener('error' , () => {
+    } catch (error) {
 
-            thumnailElement.src = "https://placehold.co/600x400?text=Thumbnail";
-        });
+        console.log('error, handlePrevLink failed', error);
     }
-
-    return newPostItem;
-}
-
-function renderPostList(postList) {
-
-    if(!Array.isArray(postList) || postList.length == 0) return;
-    
-    const Ulelement = document.getElementById('postsList');
-
-    if(!Ulelement) return;
-    
-    postList.forEach((post) => {
-
-        const liElement = createLiElement(post);
-        if(liElement) Ulelement.appendChild(liElement); 
-    });
-    
 }
 
 
 (async () => {
 
     try {
-        const queryParams = {_page: 1, _limit: 6};
+
+        const url = new URL(window.location);
+
+        if(!url.searchParams.get('_page')) url.searchParams.set('_page', 1);
+        if(!url.searchParams.get('_limit')) url.searchParams.set('_limit' , 6);
+
+        history.pushState({} , '' , url);
+
+        const queryParams  = url.searchParams;
+        
+        initPagination({
+            elementId: 'postsPagination',
+            defaultParams: queryParams,
+            onChange: (page) => {handleFilterChange('_page' , page)}
+        });
+
+        initSearch({
+            elementId: 'searchInput',
+            defaultParams: queryParams,
+            onChange: (value) => {handleFilterChange('title_like' , value)}
+        });
+        
         const {data , pagination} = await postApi.getAll(queryParams);
-        renderPostList(data);
+        renderPostList('postsList' , data);
+        renderPagination('postsPagination' , pagination);
+
     } catch (error) {
+
         console.log('error of get all' , error);
     }
 })();
