@@ -30,12 +30,25 @@ export function createPostElement(postItem) {
     }
 
     const divPost = newPostItem.querySelector('.post-item');
+     
     if(!divPost) return;
 
-    divPost.addEventListener('click' , () => {
-        window.location.assign(`/post-details.html?id=${postItem.id}`)
+    divPost.addEventListener('click' , (event) => {
+        
+        const itemNemu = divPost.querySelector('[data-id="itemMenu"]');
+        if(itemMenu && itemMenu.contains(event.target)) return;
+
+        window.location.assign(`/post-details.html?id=${postItem.id}`);
     })
 
+    const itemMenu = divPost.querySelector('.post-item-menu');
+    
+    if(!itemMenu) return;
+
+    itemMenu.addEventListener('click' , (event) => {
+        
+        window.location.assign(`/add-edit-post.html?id=${postItem.id}`);
+    });
     return newPostItem;
 }
 
@@ -54,3 +67,5 @@ export function renderPostList(elementId , postList) {
         if(liElement) Ulelement.appendChild(liElement); 
     });
 }
+
+// show something in here

@@ -5,7 +5,7 @@ const postApi = {
     add(data) {
 
         const url = '/posts';
-
+        
         return axiosClient.post(url , data);
     },
 
@@ -13,7 +13,7 @@ const postApi = {
 
         const url = `/posts/${data.id}`;
 
-        return axiosClient.patch(url);
+        return axiosClient.patch(url , data);
     },
 
     remove(id) {
