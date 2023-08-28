@@ -1,41 +1,35 @@
-import axiosClient from "./axiosClient.js";
+import axiosClient from './axiosClient.js'
 
 const postApi = {
+  add(data) {
+    const url = '/posts'
 
-    add(data) {
+    return axiosClient.post(url, data)
+  },
 
-        const url = '/posts';
-        
-        return axiosClient.post(url , data);
-    },
+  update(data) {
+    const url = `/posts/${data.id}`
 
-    update(data) {
+    return axiosClient.patch(url, data)
+  },
 
-        const url = `/posts/${data.id}`;
+  remove(id) {
+    const url = `/posts/${id}`
 
-        return axiosClient.patch(url , data);
-    },
+    return axiosClient.remove(url)
+  },
 
-    remove(id) {
+  getAll(params) {
+    const url = '/posts'
 
-        const url = `/posts/${id}`;
+    return axiosClient.get(url, { params })
+  },
 
-        return axiosClient.remove(url);
-    },
+  getById(id) {
+    const url = `/posts/${id}`
 
-    getAll(params) {
+    return axiosClient.get(url)
+  },
+}
 
-        const url = "/posts";
-        
-        return axiosClient.get(url , { params });
-    },
-
-    getById(id) {
-
-        const url = `/posts/${id}`;
-
-        return axiosClient.get(url); 
-    }
-};
-
-export default postApi;
+export default postApi

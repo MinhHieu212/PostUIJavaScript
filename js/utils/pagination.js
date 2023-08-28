@@ -1,48 +1,45 @@
-import {  getUlPagination } from "./selector";
+import { getUlPagination } from './selector'
 
+export function initPagination({ elementId, defaultParams, onChange }) {
+  const ulPagination = document.getElementById(elementId)
 
-export function initPagination({elementId , defaultParams , onChange}) {
+  if (!ulPagination) return
 
-    const ulPagination = document.getElementById(elementId);
+  const PrevLink = ulPagination.firstElementChild?.firstElementChild
 
-    if(!ulPagination) return;
+  PrevLink.addEventListener('click', (event) => {
+    event.preventDefault()
+    console.log('Prev link click')
+    const page = Number.parseInt(ulPagination.dataset.page) || 1
+    if (page >= 2) onChange?.(page - 1)
+  })
 
-    const PrevLink = ulPagination.firstElementChild?.firstElementChild;
-    
-    PrevLink.addEventListener('click' , (event) => {
-        event.preventDefault();
-        console.log('Prev link click'); 
-        const page = Number.parseInt(ulPagination.dataset.page) || 1;
-        if(page >= 2) onChange?.(page - 1);
-    });
-    
-    const NextLink = ulPagination.lastElementChild?.firstElementChild;
-    
-    NextLink.addEventListener('click' , (event) =>  {
-        event.preventDefault();
-        console.log('Next link click');
-        const page = Number.parseInt(ulPagination.dataset.page) || 1;
-        const totalPages = ulPagination.dataset.totalPages;
-        if(page < totalPages) onChange?.(page + 1); 
-    }); 
+  const NextLink = ulPagination.lastElementChild?.firstElementChild
+
+  NextLink.addEventListener('click', (event) => {
+    event.preventDefault()
+    console.log('Next link click')
+    const page = Number.parseInt(ulPagination.dataset.page) || 1
+    const totalPages = ulPagination.dataset.totalPages
+    if (page < totalPages) onChange?.(page + 1)
+  })
 }
 
-export function renderPagination(elementId , pagination) {
+export function renderPagination(elementId, pagination) {
+  const ulPagination = document.getElementById(elementId)
 
-    const ulPagination = document.getElementById(elementId);
-    
-    if(!pagination || !ulPagination) return;
+  if (!pagination || !ulPagination) return
 
-    const {_limit , _page  , _totalRows} = pagination;
+  const { _limit, _page, _totalRows } = pagination
 
-    const totalPages = Math.ceil(_totalRows / _limit);
+  const totalPages = Math.ceil(_totalRows / _limit)
 
-    ulPagination.dataset.page = _page;
-    ulPagination.dataset.totalPages = totalPages;
+  ulPagination.dataset.page = _page
+  ulPagination.dataset.totalPages = totalPages
 
-    if(_page <= 1) ulPagination.firstElementChild?.classList.add('disabled');
-    else ulPagination.firstElementChild?.classList.remove('disabled');
+  if (_page <= 1) ulPagination.firstElementChild?.classList.add('disabled')
+  else ulPagination.firstElementChild?.classList.remove('disabled')
 
-    if(_page >= totalPages) ulPagination.lastElementChild.classList.add('disabled');
-    else ulPagination.lastElementChild?.classList.remove('disabled');
-}   
+  if (_page >= totalPages) ulPagination.lastElementChild.classList.add('disabled')
+  else ulPagination.lastElementChild?.classList.remove('disabled')
+}

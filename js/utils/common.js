@@ -1,23 +1,20 @@
-export function setTextContent(parent , selector , text) {
+export function setTextContent(parent, selector, text) {
+  if (!parent) return
 
-    if(!parent) return;
-
-    const temp = parent.querySelector(selector);
-    if(temp) temp.textContent = text;
+  const temp = parent.querySelector(selector)
+  if (temp) temp.textContent = text
 }
 
-export function setFeildValue(form , selector , value) {
+export function setFieldValue(form, selector, value) {
+  if (!form) return
 
-    if(!form) return;
-
-    const feild = form.querySelector(selector);
-    if(feild) feild.value = value;
+  const feild = form.querySelector(selector)
+  if (feild) feild.value = value
 }
 
-export function setBackGroundImg(parent , selector , urlImg) {
+export function setBackGroundImg(parent, selector, urlImg) {
+  if (!parent) return
 
-    if(!parent) return;
-
-    const image = parent.querySelector(selector);
-    if(image) image.style.backgroundImage = `url("${urlImg}")`;
+  const image = parent.querySelector(selector)
+  if (image) image.style.backgroundImage = `url("${urlImg}")`
 }

@@ -5,6 +5,8 @@ import { initPostForm, toast } from './utils'
 
 async function handlerFormSubmit(postValue) {
   try {
+    // console.log(postValue)
+    // return
     const postId = postValue.id
 
     const savePost = postId ? await postApi.update(postValue) : await postApi.add(postValue)
@@ -16,6 +18,7 @@ async function handlerFormSubmit(postValue) {
     }, 2000)
   } catch (error) {
     toast.error(`Error : ${error}`)
+
     console.log(' handlerAddEditPost failed', error)
   }
 }
@@ -27,12 +30,12 @@ async function handlerFormSubmit(postValue) {
 
     // get default value
     const defaultValue = postId
-      ? await postApi.getById(postId)
+      ? await postApi.getById(postId) // have id
       : {
           title: '',
           description: '',
           author: '',
-          imageUrl: '',
+          imageUrl: '', // not have id
         }
 
     initPostForm({
@@ -41,6 +44,6 @@ async function handlerFormSubmit(postValue) {
       onChange: handlerFormSubmit,
     })
   } catch (error) {
-    console.log('failed to fetch data details', error)
+    console.log('Failed to fetch data details', error)
   }
 })()

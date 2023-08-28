@@ -1,17 +1,15 @@
-import debounce from "lodash.debounce";
+import debounce from 'lodash.debounce'
 
+export function initSearch({ elementId, defaultParams, onChange }) {
+  const searchElement = document.getElementById(elementId)
 
-export function initSearch({elementId , defaultParams , onChange}) {
+  if (!searchElement) return
 
-    const searchElement = document.getElementById(elementId);
+  if (defaultParams.get('title_like')) searchElement.value = defaultParams.get('title_like')
 
-    if(!searchElement) return;
+  const debounceSearch = debounce((event) => {
+    onChange?.(event.target.value)
+  }, 500)
 
-    if(defaultParams.get('title_like')) searchElement.value = defaultParams.get('title_like');
-
-    const debounceSearch = debounce((event) => {
-        onChange?.(event.target.value)  
-    } , 500);
-
-    searchElement.addEventListener('input' , debounceSearch);
+  searchElement.addEventListener('input', debounceSearch)
 }
