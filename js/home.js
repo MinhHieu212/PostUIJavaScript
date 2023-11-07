@@ -46,9 +46,7 @@ async function handleFilterChange(filterName, filterValue) {
     })
 
     const { data, pagination } = await postApi.getAll(queryParams)
-
     renderPostList('postsList', data)
-
     renderPagination('postsPagination', pagination)
   } catch (error) {
     console.log('error of get all', error)

@@ -2,33 +2,33 @@ import axiosClient from './axiosClient.js'
 
 const postApi = {
   add(data) {
-    const url = '/posts'
+    const path = '/posts'
 
-    return axiosClient.post(url, data)
+    return axiosClient.post(path, data)
   },
 
   update(data) {
-    const url = `/posts/${data.id}`
+    const path = `/posts/${data.id}`
 
-    return axiosClient.patch(url, data)
+    return axiosClient.patch(path, data)
   },
 
   remove(id) {
-    const url = `/posts/${id}`
+    const path = `/posts/${id}`
 
-    return axiosClient.remove(url)
+    return axiosClient.remove(path)
   },
 
   getAll(params) {
-    const url = '/posts'
+    const path = '/posts'
 
-    return axiosClient.get(url, { params })
+    return axiosClient.get(path, { params })
   },
 
   getById(id) {
-    const url = `/posts/${id}`
+    const path = `/posts/${id}`
 
-    return axiosClient.get(url)
+    return axiosClient.get(path)
   },
 }
 
